@@ -11,7 +11,7 @@ The n-gram Analysis from SP Search Term Report is a Streamlit app designed for a
 
 ## How to Use
 1. **Prepare the SP Search Term Report**: Download the "60 days SP ST report" from Amazon's Bulk Uploads section in the Ad Console.
-2. **Access the App**: Open the [n-gram Analysis Streamlit app](https://yourappurl.streamlitapp.com/) in your web browser.
+2. **Access the App**: Open the [n-gram Analysis Streamlit app](https://ngramapp.streamlit.app/) in your web browser.
 3. **Upload the Report**: Use the file uploader to select and upload your SP Search Term Report in `.xlsx` format.
 4. **Enter ASINs and Branded Terms**: Input the ASINs you wish to analyze, one per line, and optionally enter any branded terms you want to exclude from the analysis, also one per line.
 5. **Run the Analysis**: Click the "Perform n-gram analysis" button to process your report.
