@@ -11,7 +11,6 @@ from io import BytesIO
 
 # Streamlit app title and logo
 st.title("n-gram analysis from SP Search Term report")
-st.image("https://media.licdn.com/dms/image/C4E0BAQFNgWlJu-JJOQ/company-logo_200_200/0/1639577716977/thrasio_logo?e=1720656000&v=beta&t=WQrshnM1GaRAOzxHmkL893JYFmZ9r6ZfYdkLRRD8_ZM")
 
 # Download required nltk resources
 nltk.download('punkt')
