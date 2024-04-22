@@ -111,7 +111,7 @@ with tab2:
         # Pre-upload message with a hyperlink to the PBI Report
     st.markdown(
         'Please download a filtered table from this PBI Report '
-        '[here](https://app.powerbi.com/groups/me/reports/204aa7cf-a0c6-4d55-bf10-83a25244e14f/ReportSection?experience=power-bi&clientSideAuth=0){target="_blank"}',
+        '[here](https://app.powerbi.com/groups/me/reports/204aa7cf-a0c6-4d55-bf10-83a25244e14f/ReportSection?experience=power-bi&clientSideAuth=0)',
         unsafe_allow_html=True
     )
     
