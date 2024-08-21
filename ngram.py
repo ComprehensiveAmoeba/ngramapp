@@ -7,27 +7,17 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import nltk
 import base64
-import shutil
 from io import BytesIO
 
 # Streamlit app title and logo
 st.title("n-gram analysis tool")
 
-# Explicitly download punkt
+# Explicitly download required nltk resources
 nltk.download('punkt', quiet=False)
+nltk.download("wordnet", quiet=False)
+nltk.download("stopwords", quiet=False)
 
-# Download required nltk resources
-nltk.download("wordnet")
-nltk.download("stopwords")
-
-# Path to the nltk_data directory
-nltk_data_path = nltk.data.find('tokenizers/punkt').path.split('tokenizers')[0]
-
-# Remove nltk_data directory (this will be automatically re-downloaded)
-shutil.rmtree(nltk_data_path)
-
-# Re-download the punkt data
-nltk.download('punkt', quiet=False)
+# Now you can safely proceed with the rest of the code
 
 # Define tokenize and clean text function
 def clean_tokenize(text, stop_words=set()):
@@ -120,7 +110,7 @@ with tab1:
 
 # PBI Report tab
 with tab2:
-        # Pre-upload message with a hyperlink to the PBI Report
+    # Pre-upload message with a hyperlink to the PBI Report
     st.markdown(
         'Please download a filtered table from this PBI Report '
         '[here](https://app.powerbi.com/groups/me/reports/204aa7cf-a0c6-4d55-bf10-83a25244e14f/ReportSection?experience=power-bi&clientSideAuth=0)',
@@ -180,5 +170,3 @@ with tab2:
             st.markdown(href, unsafe_allow_html=True)
         else:
             st.error("Please upload a file and enter at least one ASIN.")
-
-
