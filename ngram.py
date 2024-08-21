@@ -2,26 +2,20 @@ import streamlit as st
 import pandas as pd
 import re
 import datetime
-from nltk import bigrams, trigrams, word_tokenize
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import stopwords
-import nltk
+import spacy
 import base64
 from io import BytesIO
+
+# Load SpaCy model
+nlp = spacy.load("en_core_web_sm")
 
 # Streamlit app title and logo
 st.title("n-gram analysis tool")
 
-# Download required nltk resources
-nltk.download("punkt")
-nltk.download("wordnet")
-nltk.download("stopwords")
-
-# Define tokenize and clean text function
+# Define tokenize and clean text function using SpaCy
 def clean_tokenize(text, stop_words=set()):
-    lemmatizer = WordNetLemmatizer()
-    tokens = word_tokenize(text.lower())
-    cleaned_tokens = [lemmatizer.lemmatize(token) for token in tokens if token.isalpha() and token not in stop_words]
+    doc = nlp(text.lower())
+    cleaned_tokens = [token.lemma_ for token in doc if token.is_alpha and token.text not in stop_words]
     return cleaned_tokens
 
 # Define function to aggregate data for n-grams, including metrics calculation
@@ -46,10 +40,8 @@ def aggregate_ngrams(data, ngram_func, stop_words, include_campaign_id=False):
     else:
         return pd.DataFrame()
 
-# Load nltk resources and set up stop words
-stop_words = set(stopwords.words("english"))
-additional_stops = {"in", "for", "the", "of", "if", "when", "and", "de", "para"}
-stop_words.update(additional_stops)
+# Define stop words
+stop_words = {"in", "for", "the", "of", "if", "when", "and", "de", "para"}
 
 # Create tabs for "Bulk Sheet ST Report" and "PBI Report"
 tab1, tab2 = st.tabs(["Bulk Sheet ST Report", "PBI Report"])
@@ -78,8 +70,8 @@ with tab1:
             df_filtered = df_filtered[df_filtered["ASIN"].isin(asins)]
 
             monograms_aggregated = aggregate_ngrams(df_filtered, lambda x: x, stop_words, include_campaign_id=True)
-            bigrams_aggregated = aggregate_ngrams(df_filtered, bigrams, stop_words, include_campaign_id=True)
-            trigrams_aggregated = aggregate_ngrams(df_filtered, trigrams, stop_words, include_campaign_id=True)
+            bigrams_aggregated = aggregate_ngrams(df_filtered, lambda x: zip(x, x[1:]), stop_words, include_campaign_id=True)
+            trigrams_aggregated = aggregate_ngrams(df_filtered, lambda x: zip(x, x[1:], x[2:]), stop_words, include_campaign_id=True)
 
             report_df = pd.concat([monograms_aggregated, bigrams_aggregated, trigrams_aggregated], keys=["Monograms", "Bigrams", "Trigrams"])
             report_df.reset_index(level=0, inplace=True)
@@ -108,7 +100,7 @@ with tab1:
 
 # PBI Report tab
 with tab2:
-        # Pre-upload message with a hyperlink to the PBI Report
+    # Pre-upload message with a hyperlink to the PBI Report
     st.markdown(
         'Please download a filtered table from this PBI Report '
         '[here](https://app.powerbi.com/groups/me/reports/204aa7cf-a0c6-4d55-bf10-83a25244e14f/ReportSection?experience=power-bi&clientSideAuth=0)',
@@ -141,8 +133,8 @@ with tab2:
             df_filtered = df_filtered[df_filtered["ASIN"].isin(asins)]
 
             monograms_aggregated = aggregate_ngrams(df_filtered, lambda x: x, stop_words, include_campaign_id=False)
-            bigrams_aggregated = aggregate_ngrams(df_filtered, bigrams, stop_words, include_campaign_id=False)
-            trigrams_aggregated = aggregate_ngrams(df_filtered, trigrams, stop_words, include_campaign_id=False)
+            bigrams_aggregated = aggregate_ngrams(df_filtered, lambda x: zip(x, x[1:]), stop_words, include_campaign_id=False)
+            trigrams_aggregated = aggregate_ngrams(df_filtered, lambda x: zip(x, x[1:], x[2:]), stop_words, include_campaign_id=False)
 
             report_df = pd.concat([monograms_aggregated, bigrams_aggregated, trigrams_aggregated], keys=["Monograms", "Bigrams", "Trigrams"])
             report_df.reset_index(level=0, inplace=True)
