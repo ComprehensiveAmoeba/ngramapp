@@ -2,4 +2,3 @@ streamlit
 pandas
 openpyxl
 spacy
-en-core-web-sm
