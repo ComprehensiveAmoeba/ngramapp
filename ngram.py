@@ -7,15 +7,27 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import nltk
 import base64
+import shutil
 from io import BytesIO
 
 # Streamlit app title and logo
 st.title("n-gram analysis tool")
 
+# Explicitly download punkt
+nltk.download('punkt', quiet=False)
+
 # Download required nltk resources
-nltk.download("punkt")
 nltk.download("wordnet")
 nltk.download("stopwords")
+
+# Path to the nltk_data directory
+nltk_data_path = nltk.data.find('tokenizers/punkt').path.split('tokenizers')[0]
+
+# Remove nltk_data directory (this will be automatically re-downloaded)
+shutil.rmtree(nltk_data_path)
+
+# Re-download the punkt data
+nltk.download('punkt', quiet=False)
 
 # Define tokenize and clean text function
 def clean_tokenize(text, stop_words=set()):
