@@ -2,3 +2,6 @@ streamlit
 pandas
 openpyxl
 spacy
+nltk
+nltk.downloader stopwords
+nltk.downloader wordnet
